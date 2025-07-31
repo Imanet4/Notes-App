@@ -1,32 +1,47 @@
-// Import the rate limit client (configured with Upstash Redis)
-import ratelimit from "../config/upstash.js";
+import RateLimit from '../models/rateLimit.model';
 
-/*
- * Rate limiter middleware
- * Enforcing request limits using Upstash Redis to prevent API abuse
- */
 const rateLimiter = async (req, res, next) => {
-    try {
-        // Attempting to limit requests using Upstash
-        const { success } = await ratelimit.limit("my-rate-limit");
+  const ip = req.ip || req.connection.remoteAddress;
+  const windowMs = 60 * 1000; // 1 minute window
+  const maxRequests = 100; // Max requests per window
 
-        // If it is (success = false), block the request
-        if (!success) {
-            return res.status(429).json({
-                message: "Too many requests, please try again later."
-            });
-        }
+  try {
+    let record = await RateLimit.findOne({ ip });
 
-        next();
-
-    } catch (error) {
-        
-        // Log and forward any rate limiting errors
-        console.log("Rate limit error:", error);
-        
-        // Pass error to Express error handler
-        next(error);
+    if (!record) {
+      // First request from this IP
+      record = new RateLimit({ ip });
+      await record.save();
+      return next();
     }
-}
+
+    const timeSinceLastRequest = Date.now() - record.lastRequest;
+    
+    if (timeSinceLastRequest > windowMs) {
+      // Window expired, reset count
+      record.count = 1;
+      record.lastRequest = Date.now();
+      await record.save();
+      return next();
+    }
+
+    if (record.count >= maxRequests) {
+      // Rate limit exceeded
+      return res.status(429).json({
+        message: "Too many requests, please try again later."
+      });
+    }
+
+    // Increment count and allow request
+    record.count += 1;
+    record.lastRequest = Date.now();
+    await record.save();
+    next();
+
+  } catch (error) {
+    console.error('Rate limit error:', error);
+    next(); // Fail open - allow request if rate limiting fails
+  }
+};
 
 export default rateLimiter;

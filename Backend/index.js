@@ -1,47 +1,37 @@
-import express from 'express'; // Express framework for building the server
-import dotenv from 'dotenv'; // Loading environment variables 
-import cors from 'cors'; // Cross-Origin Resource Sharing middleware
-import rateLimiter from './middleware/rateLimiter.js'; // Rate limiting middleware
-import notesRoutes from './routes/notesRoutes.js'; // Router for notes-related endpoints
-import { connectDB } from './config/database.js'; // DB connection function
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import notesRoutes from './routes/notesRoutes.js';
+import rateLimiter from './middleware/rateLimiter.js';
 
-// Loading environment variables from .env file into process.env
+// 1. Loading environment variables
 dotenv.config();
 
-// Initialize Express application
+// 2. Creating Express app
 const app = express();
-
-// Set the port from environment variables or default to 5001
 const PORT = process.env.PORT || 8000;
 
-
-// ---- MIDDLEWARE SETUP ----//
-// Enable CORS with specific origin
-app.use(cors({
-    origin: "http://localhost:3000", // Only allow requests from this origin
-}));
-
-
-// Parse incoming JSON requests and make them available in req.body
+// 3. Middleware
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
-
-
-// Apply rate limiting to all routes
 app.use(rateLimiter);
 
-
-
-
-
-// ---- ROUTES ---- //
-// Mount the notes routes at the /api/notes base path
+// 4. Routes
 app.use("/api/notes", notesRoutes);
 
+// 5. MongoDB Connection
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/notesapp');
+    console.log('Connected to MongoDB');
+  } catch (error) {
+    console.error('MongoDB connection error:', error.message);
+    process.exit(1);
+  }
+};
 
-// ========== DATABASE & SERVER INITIALIZATION ========== //
-// Connect to the DB first, then start the server
+// 6. Start Server
 connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server started on PORT: ${PORT}` );
-    });
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
