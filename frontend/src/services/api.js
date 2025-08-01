@@ -3,7 +3,7 @@ import axios from "axios";
 
 //Creating a pre-config instance of axios with my base URL
 const API = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: "http://localhost:8000",
 });
 
 

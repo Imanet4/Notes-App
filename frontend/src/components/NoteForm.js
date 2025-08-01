@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from "react-bootstrap"; //Bootstrap button component
 import { FaPaperPlane } from "react-icons/fa"; //Paper plane icon
+import '../styles/transitions.css'
 
 
 const NoteForm = ({ onSubmit }) => {
     //Initializing state for note title & content
-    const {note, setNote} = useState({ title:"", content:""});
+    const [note, setNote] = useState({ title: "", content: ""});
 
     //Handling form submission
     const handleSubmit = (e) => {

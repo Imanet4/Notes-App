@@ -1,6 +1,8 @@
 import React from "react";
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { Card, Badge, Button } from "react-bootstrap";  // UI components
-import { FaTrash, FaEdit } from "react-icons/fa";       // Icons for actions
+import { FaTrash, FaEdit } from "react-icons/fa";
+import '../styles/transitions.css'   
 
 
 

@@ -1,0 +1,38 @@
+/* Bootstrap Overrides */
+body {
+  background: linear-gradient(135deg, #0f0c29, #302b63);
+  color: #e0e0e0;
+}
+
+/* Neon Text Effect */
+.neon-text {
+  color: #fff;
+  text-shadow: 
+    0 0 5px #0ff,
+    0 0 10px #0ff,
+    0 0 20px #0ff;
+}
+
+/* Futuristic Inputs */
+.futuristic-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #0ff;
+  color: white !important;
+}
+
+.futuristic-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Holographic Card */
+.holographic-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
+}
+
+.holographic-card:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  transform: translateY(-5px);
+}

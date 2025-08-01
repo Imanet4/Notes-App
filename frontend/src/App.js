@@ -1,7 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import NotesPage from './pages/NotesPage'
+import NotesPage from './pages/NotesPage';
+import './styles/App.css';
+import './styles/transitions.css'
 
 const App = () => {
   return (
