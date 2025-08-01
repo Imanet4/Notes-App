@@ -1,4 +1,4 @@
-import RateLimit from '../models/rateLimit.model';
+import RateLimit from '../models/rateLimit.model.js';
 
 
 
