@@ -1,8 +1,14 @@
-import React from 'react'
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   return (
-    <div>App</div>
+    <BrowserRouter>
+    <Routes>
+      <Route path='/'></Route>
+    </Routes>
+    </BrowserRouter>
   )
 }
 
