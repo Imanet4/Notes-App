@@ -18,9 +18,15 @@ import Note from "../models/Note.js";
 const createNote = async (req, res) => {
     try {
         const { title, content } = req.body;
+
+        //Basic Validation 
+        if(!title || !content) {
+            return res.status(400).json({message: 'Title and Content are required!'})
+        }
+
         const newNote = new Note({ title, content });
         await newNote.save();
-        res.status(201).json({ message: "Note created successfully" });
+        res.status(201).json({ message: "Note was created successfully" });
     } catch (error) {
         console.error("Error creating a note", error);
         res.status(500).json({ message: "Internal server error" });
