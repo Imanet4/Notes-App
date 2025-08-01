@@ -1,9 +1,13 @@
 import RateLimit from '../models/rateLimit.model';
 
+
+
+
+
 const rateLimiter = async (req, res, next) => {
   const ip = req.ip;
   const windowMs = 60 * 1000; // 1 minute window
-  const maxRequests = 100; 
+  const maxRequests = 100; //max requests /window
 
   try {
     let record = await RateLimit.findOne({ ip });
@@ -13,6 +17,8 @@ const rateLimiter = async (req, res, next) => {
       record = new RateLimit({ ip, count: 1 });
         } else {
             const timeElapsed = Date.now() - record.updatedAt;
+
+            //Reseting count if window has passed
             if (timeElapsed > windowMs) {
                 record.count = 1;
             } else if (record.count >= maxRequests) {
@@ -22,7 +28,7 @@ const rateLimiter = async (req, res, next) => {
             } else {
                 record.count += 1;
             }
-        }
+        };
 
         record.updatedAt = Date.now();
         await record.save();
