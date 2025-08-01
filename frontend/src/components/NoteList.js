@@ -7,7 +7,7 @@ import { FaTrash, FaEdit } from "react-icons/fa";       // Icons for actions
 
 
 // Component to display a list of notes
-const NoteList = ({ notes, onDelete }) => {
+const NoteList = ({ notes, onDelete, onEdit }) => {
   return (
     <div className="mt-4">
       {notes.map((note) => (
@@ -26,8 +26,22 @@ const NoteList = ({ notes, onDelete }) => {
             {/* Note content */}
             <Card.Text>{note.content}</Card.Text>
 
-            {/* Delete button aligned to the right */}
+
+
+            
             <div className="d-flex justify-content-end">
+              {/* Edit button aligned to the right */}
+              <Button
+                wariant="outline-primary"
+                size="sm"
+                onClick={() => onEdit(note._id)}
+                className="me-2"
+              >
+                <FaEdit />
+              </Button>
+
+              
+              {/* Delete button aligned to the right */}
               <Button
                 variant="outline-danger"
                 size="sm"

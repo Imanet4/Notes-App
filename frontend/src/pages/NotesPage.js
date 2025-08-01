@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchNotes, createNote, deleteNote } from "../services/api";
+import { fetchNotes, createNote, deleteNote, updateNote } from "../services/api";
 
 // Import child components
 import NoteForm from "../components/NoteForm";
@@ -32,13 +32,21 @@ function NotesPage() {
     loadNotes(); 
   };
 
+  //Editing a note by ID and refreshing the list
+  const handleEdit = async (id) => {
+    await updateNote(id);
+    loadNotes();
+  };
+
   return (
     <div>
       {/* Form to create new notes */}
       <NoteForm onSubmit={handleAddNote} />
 
       {/* List of existing notes with delete functionality */}
-      <NoteList notes={notes} onDelete={handleDelete} />
+      <NoteList notes={notes} 
+      onDelete={handleDelete}
+      onEdit={handleEdit} />
     </div>
   );
 }
