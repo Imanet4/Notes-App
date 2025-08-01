@@ -26,7 +26,7 @@ const createNote = async (req, res) => {
 
         const newNote = new Note({ title, content });
         await newNote.save();
-        res.status(201).json({ message: "Note was created successfully" });
+        res.status(201).json({ message: "Note was created successfully", note: newNote });
     } catch (error) {
         console.error("Error creating a note", error);
         res.status(500).json({ message: "Internal server error" });
