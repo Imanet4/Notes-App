@@ -9,14 +9,13 @@ const rateLimitSchema = new mongoose.Schema({
   count: { 
     type: Number, 
     default: 1 
-  },
-  lastRequest: { 
-    type: Date, 
-    default: Date.now 
   }
-}, { timestamps: true });
+}, { timestamps: true,
+  
+  //Auto-expire records after 1 hour
+    expireAfterSeconds: 3600
+ });
 
-// Auto-expire documents after 1 hour
-rateLimitSchema.index({ createdAt: 1 }, { expireAfterSeconds: 3600 });
+const RateLimit = mongoose.model('RateLimit', rateLimitSchema)
 
-export default mongoose.model('RateLimit', rateLimitSchema);
+export default RateLimit;
