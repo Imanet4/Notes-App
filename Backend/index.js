@@ -20,8 +20,27 @@ app.use(rateLimiter);
 // 4. Routes
 app.use("/api/notes", notesRoutes);
 
+// 4.1 Health check endpoint
+app.get('/api/health', (_, res) => {
+  res.status(200).json({ status: 'OK' })
+});
+
+// 4.2 : 404 handeler
+app.use((_, res) => {
+  res.status(404).json({ message: 'Route not found'})
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Something went wrong!'})
+});
+
 // 5. Start Srver
 connectDB().then(() => {
   app.listen(PORT, () => console.log(`Server Running On Port ${PORT}`))
-})
+}).catch(err => {
+  console.error('Database connection failed', err);
+  process.exit(1);
+});
 
